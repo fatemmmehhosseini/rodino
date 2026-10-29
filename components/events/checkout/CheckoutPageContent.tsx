@@ -48,9 +48,7 @@ export default function CheckoutPageContent() {
     : events.find((item) => item.id === eventId);
 
   const resolvedTotalPrice = isTravelEvent
-    ? eventFromSlug?.price
-      ? eventFromSlug.price / 10
-      : 0
+    ? eventFromSlug?.price ?? 0
     : reservationTotalPrice;
 
   const showtime = showtimes.find(

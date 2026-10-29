@@ -31,9 +31,7 @@ function formatDate(date: string) {
 function formatPrice(price?: number) {
   if (!price) return "رایگان";
 
-  const tomanPrice = price / 10;
-
-  return `${tomanPrice.toLocaleString("fa-IR")} تومان`;
+  return `${price.toLocaleString("fa-IR")} تومان`;
 }
 
 export default function EventCard({ event }: Props) {

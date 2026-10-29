@@ -24,6 +24,7 @@ export default function PaymentPageContent() {
     venueId,
     selectedSeatIds,
     totalPrice: reservationTotalPrice,
+    clearReservation,
   } = useReservationStore();
 
   const [paymentResult, setPaymentResult] = useState<
@@ -40,9 +41,7 @@ export default function PaymentPageContent() {
     event?.eventCatagory === "TRAVEL";
 
   const totalPrice = isTravelEvent
-    ? event?.price
-      ? event.price / 10
-      : 0
+    ? event?.price ?? 0
     : reservationTotalPrice;
 
   const showtime = isTravelEvent
@@ -89,6 +88,7 @@ export default function PaymentPageContent() {
 
     setTrackingCode(code);
     setPaymentResult("success");
+    
   };
 
   const handleFailure = () => {
@@ -96,16 +96,32 @@ export default function PaymentPageContent() {
   };
 
   const handleClose = () => {
+  
     setPaymentResult(null);
+    router.push("/events");
   };
 
   const handleBackToEvents = () => {
+    
     router.push("/events");
   };
 
   if (!event) {
-    return null;
-  }
+      return null;
+    }
+
+    const isInvalidReservation =
+      !isTravelEvent &&
+      !event.isFree &&
+      (!showtimeId ||
+        !venueId ||
+        selectedSeatIds.length === 0 ||
+        reservationTotalPrice <= 0);
+
+   if (paymentResult === null && isInvalidReservation) {
+      router.replace(`/events/${event.slug}/seats`);
+      return null;
+    }
 
   return (
     <main className="min-h-screen bg-[#FBFAFD] px-4 pb-10 pt-25 sm:px-6 lg:px-10">

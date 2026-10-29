@@ -99,11 +99,21 @@ export default function EventGrid() {
     }
 
     if (search) {
+      const categorySearchTerms: Record<string, string> = {
+        MUSIC: "music concert",
+        SPORTS: "sports sport",
+        THEATER: "theater theatre",
+        TECHNOLOGY: "technology tech",
+        TRAVEL: "travel tour tourism",
+      };
+
       const searchableText = [
         event.title,
         event.description,
+        event.slug,
         event.eventCatagory,
         categoryLabels[event.eventCatagory],
+        categorySearchTerms[event.eventCatagory],
         event.eventSubCatagory,
       ]
         .filter(Boolean)
@@ -134,31 +144,20 @@ export default function EventGrid() {
 
     
     if (date) {
-      const showtime = getFirstShowtime(event.id);
-
-      if (!showtime) {
-        return false;
-      }
-
-      const persianMonth = getPersianMonth(
-        showtime.startDate
+      const eventShowtimes = showtimes.filter(
+        (showtime) => showtime.eventId === event.id
       );
 
-      
-      if (
-        date === "aban" &&
-        persianMonth !== 8
-      ) {
-        return false;
-      }
+      const hasMatchingDate = eventShowtimes.some((showtime) => {
+        const persianMonth = getPersianMonth(showtime.startDate);
 
-      
-      if (
-        date === "azar" &&
-        persianMonth !== 9
-      ) {
+        if (date === "aban") return persianMonth === 8;
+        if (date === "azar") return persianMonth === 9;
+
         return false;
-      }
+      });
+
+      if (!hasMatchingDate) return false;
     }
 
     
@@ -179,7 +178,7 @@ export default function EventGrid() {
     if (price === "under-1") {
       if (
         event.isFree ||
-        (event.price ?? 0) >= 10_000_000
+        (event.price ?? 0) >= 1_000_000
       ) {
         return false;
       }
@@ -191,8 +190,8 @@ export default function EventGrid() {
 
       if (
         event.isFree ||
-        eventPrice < 10_000_000 ||
-        eventPrice > 20_000_000
+        eventPrice < 1_000_000 ||
+        eventPrice > 2_000_000
       ) {
         return false;
       }
@@ -202,7 +201,7 @@ export default function EventGrid() {
     if (price === "over-2") {
       if (
         event.isFree ||
-        (event.price ?? 0) <= 20_000_000
+        (event.price ?? 0) <= 2_000_000
       ) {
         return false;
       }
