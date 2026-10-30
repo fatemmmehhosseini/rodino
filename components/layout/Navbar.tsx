@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import Link from "next/link";
@@ -10,14 +8,15 @@ import { usePathname } from "next/navigation";
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 30);
     };
+
     handleScroll();
     window.addEventListener("scroll", handleScroll);
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -27,6 +26,7 @@ export default function Navbar() {
     } else {
       document.body.style.overflow = "";
     }
+
     return () => {
       document.body.style.overflow = "";
     };
@@ -38,16 +38,14 @@ export default function Navbar() {
 
   const pathname = usePathname();
 
- const isHomePage = pathname === "/"; 
+  const isHomePage = pathname === "/";
 
   return (
-    
     <header
-    
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-in-out ${
         !isHomePage || scrolled
-        ? "bg-[#1A102E]/85 shadow-lg shadow-black/20 backdrop-blur-xl"
-        : "bg-transparent"
+          ? "bg-[#1A102E]/85 shadow-lg shadow-black/20 backdrop-blur-xl"
+          : "bg-transparent"
       }`}
     >
       <div className="mx-auto flex h-[76px] max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-14 xl:px-20">
@@ -62,19 +60,20 @@ export default function Navbar() {
               R
             </span>
           </div>
+
           <span className="text-2xl font-black tracking-tight text-white">
             رودینو
           </span>
         </Link>
 
         {/* Desktop navigation */}
-        <nav className="hidden items-center gap-8 lg:flex text-white">
+        <nav className="hidden items-center gap-8 text-white lg:flex">
           <Link
             href="/events"
             className="group relative flex items-center gap-1 text-sm font-medium text-white/80 transition-colors duration-300 hover:text-white"
           >
             رویدادها
-            
+
             <span className="absolute -bottom-2 right-0 h-[2px] w-0 rounded-full bg-gradient-to-l from-[#ec4899] to-[#7c3aed] transition-all duration-300 group-hover:w-full" />
           </Link>
 
@@ -83,6 +82,7 @@ export default function Navbar() {
             className="group relative text-sm font-medium text-white/80 transition-colors duration-300 hover:text-white"
           >
             درباره ما
+
             <span className="absolute -bottom-2 right-0 h-[2px] w-0 rounded-full bg-gradient-to-l from-[#ec4899] to-[#7c3aed] transition-all duration-300 group-hover:w-full" />
           </Link>
 
@@ -91,6 +91,7 @@ export default function Navbar() {
             className="group relative text-sm font-medium text-white/80 transition-colors duration-300 hover:text-white"
           >
             مجله
+
             <span className="absolute -bottom-2 right-0 h-[2px] w-0 rounded-full bg-gradient-to-l from-[#ec4899] to-[#7c3aed] transition-all duration-300 group-hover:w-full" />
           </Link>
 
@@ -99,18 +100,26 @@ export default function Navbar() {
             className="group relative text-sm font-medium text-white/80 transition-colors duration-300 hover:text-white"
           >
             تماس با ما
+
             <span className="absolute -bottom-2 right-0 h-[2px] w-0 rounded-full bg-gradient-to-l from-[#ec4899] to-[#7c3aed] transition-all duration-300 group-hover:w-full" />
           </Link>
         </nav>
 
-        {/* Desktop login */}
-        <Link
-          href="/login"
-          className="btn hidden lg:flex"
-        >
-          <UserRound size={18} strokeWidth={2} />
-          ورود / ثبت‌نام
-        </Link>
+        {/* Desktop actions */}
+        <div className="hidden items-center gap-3 lg:flex">
+          <Link
+            href="/host"
+            className="group flex items-center rounded-xl border border-white/40  px-4 py-2.5 text-sm !text-white transition-all duration-300 hover:bg-linear-to-l hover:from-[#7C3AED]/30 hover:to-[#EC4899]/20"
+          >
+            رویداد خودت رو ثبت کن
+          </Link>
+
+          {/* Desktop login */}
+          <Link href="/login" className="btn flex">
+            <UserRound size={18} strokeWidth={2} />
+            ورود / ثبت‌نام
+          </Link>
+        </div>
 
         {/* Mobile menu button */}
         <button
@@ -128,7 +137,6 @@ export default function Navbar() {
         </button>
       </div>
 
-      
       <div
         className={`lg:hidden ${
           menuOpen
@@ -136,7 +144,7 @@ export default function Navbar() {
             : "pointer-events-none -translate-y-4 opacity-0"
         } absolute inset-x-0 top-[76px] overflow-hidden border-t border-white/10 bg-[#100c20]/95 backdrop-blur-xl transition-all duration-500 ease-in-out`}
       >
-        <nav className="mx-auto flex max-w-[1440px] flex-col px-5 py-4 sm:px-8 text-white">
+        <nav className="mx-auto flex max-w-[1440px] flex-col px-5 py-4 text-white sm:px-8">
           {[
             { href: "/events", label: "رویدادها" },
             { href: "/about", label: "درباره ما" },
@@ -153,23 +161,42 @@ export default function Navbar() {
                   : "translate-x-4 opacity-0"
               }`}
               style={{
-                transitionDelay: menuOpen ? `${index * 80 + 100}ms` : "0ms",
+                transitionDelay: menuOpen
+                  ? `${index * 80 + 100}ms`
+                  : "0ms",
               }}
             >
               {item.label}
             </Link>
           ))}
 
+          {/* Mobile host button */}
           <Link
-            href="/login"
+            href="/host"
             onClick={closeMenu}
-            className={`btn mt-5 flex items-center justify-center gap-2 ${
+            className={`mt-5 flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm font-bold text-white transition-all duration-300 hover:bg-white/10 ${
               menuOpen
                 ? "translate-y-0 opacity-100"
                 : "translate-y-4 opacity-0"
             }`}
             style={{
               transitionDelay: menuOpen ? "400ms" : "0ms",
+            }}
+          >
+            رویداد خودت رو ثبت کن
+          </Link>
+
+          {/* Mobile login */}
+          <Link
+            href="/login"
+            onClick={closeMenu}
+            className={`btn mt-3 flex items-center justify-center gap-2 ${
+              menuOpen
+                ? "translate-y-0 opacity-100"
+                : "translate-y-4 opacity-0"
+            }`}
+            style={{
+              transitionDelay: menuOpen ? "480ms" : "0ms",
             }}
           >
             <UserRound size={18} strokeWidth={2} />

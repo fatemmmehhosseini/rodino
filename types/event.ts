@@ -9,6 +9,12 @@ export interface Provider {
   legalName?: string;
   website?: string;
   thumbId?: number;
+
+  phone?: string;
+  email?: string;
+  status?: string;
+  isActive?: boolean;
+  licenseVerified?: boolean;
 }
 
 export interface Event {
